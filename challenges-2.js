@@ -25,7 +25,7 @@
 // Or if property = 'age' -> [40, 26, 22, 28, 23, 45, 21, ...]
 
 const getAllValuesForProperty = (data, property) => {
-	return []
+	return data.map(item => item.fields[property]).filter(value => value !== undefined);
 }
 
 // 2 -------------------------------------------------------------
@@ -34,7 +34,7 @@ const getAllValuesForProperty = (data, property) => {
 // array of all the male passengers [{...}, {...}, {...}, ...]
 
 const filterByProperty = (data, property, value) => {
-	return []
+	return data.filter(item => item.fields[property] === value);
 }
 
 // 3 -------------------------------------------------------------
@@ -43,7 +43,7 @@ const filterByProperty = (data, property, value) => {
 // given property have been removed
 
 const filterNullForProperty = (data, property) => {
-	return []
+	return data.filter(item => item.fields[property] !== undefined);
 }
 
 // 4 -------------------------------------------------------------
@@ -52,7 +52,13 @@ const filterNullForProperty = (data, property) => {
 // Return the total of all values for a given property. This
 
 const sumAllProperty = (data, property) => {
-	return 0
+	return data.reduce((sum, item) => {
+		const value = item.fields[property];
+		if (typeof value === 'number') {
+			return sum + value;
+		}
+			return sum;
+		}, 0);
 }
 
 
@@ -67,7 +73,14 @@ const sumAllProperty = (data, property) => {
 // at Cherbourg, 77 emabrked at Queenstown, and 2 are undedfined
 
 const countAllProperty = (data, property) => {
-	return {}
+	const count = {};
+	data.forEach(item => {
+		const value = item.fields[property];
+		if (value !== undefined) {
+			count[value] = (count[value] || 0) + 1;
+		}
+	});
+	return count;
 }
 
 
@@ -80,8 +93,20 @@ const countAllProperty = (data, property) => {
 // ages 0 - 10, 10 - 20, 20 - 30 etc. 
 
 const makeHistogram = (data, property, step) => {
-	return []
-}
+	const histogram = [];
+	data.forEach(item => {
+	  const value = item.fields[property];
+	  if (typeof value === 'number' && !isNaN(value)) {
+		const bucketIndex = Math.floor(value / step);
+		if (histogram[bucketIndex] === undefined) {
+		  histogram[bucketIndex] = 0;
+		}
+		histogram[bucketIndex]++;
+	  }
+	});
+	return histogram;
+};
+
 
 // 7 ------------------------------------------------------------
 // normalizeProperty takes data and a property and returns an 
@@ -89,7 +114,10 @@ const makeHistogram = (data, property, step) => {
 // to divide each value by the maximum value in the array.
 
 const normalizeProperty = (data, property) => {
-	return []
+	const values = data.map(item => item.fields[property]).filter(value => typeof value === 'number' && !isNaN(value));;
+	const max = Math.max(...values);
+	const normalized = values.map(value => value / max);
+	return normalized;
 }
 
 // 8 ------------------------------------------------------------
@@ -100,7 +128,9 @@ const normalizeProperty = (data, property) => {
 // would return ['male', 'female']
 
 const getUniqueValues = (data, property) => {
-	return []
+	const values = data.map(item => item.fields[property]).filter(value => typeof value === 'number' && !isNaN(value));;
+	const uniqueValues = [...new Set(values)];
+	return uniqueValues;
 }
 
 // --------------------------------------------------------------
