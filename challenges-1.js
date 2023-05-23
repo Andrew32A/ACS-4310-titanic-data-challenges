@@ -127,7 +127,12 @@ const getMinFare = (data) => {
 // passengers are missing data for fare. Be sure to filter these! 
 
 const getMaxFare = (data) => {
-	return 0
+	const validFares = data.filter(item => item.fields.fare !== undefined);
+	if (validFares.length === 0) {
+		return null;
+	}
+	const maxFare = Math.max(...validFares.map(item => item.fields.fare));
+	return maxFare;
 }
 
 // 12 ---------------------------------------------------------------
@@ -135,7 +140,8 @@ const getMaxFare = (data) => {
 // "sex" property that is either "male" or "female"
 
 const getPassengersByGender = (data, gender) => {
-	return 0
+	const passengers = data.filter(item => item.fields.sex === gender);
+	return passengers.length;
 }
 
 // 13 ---------------------------------------------------------------
@@ -144,14 +150,16 @@ const getPassengersByGender = (data, gender) => {
 // to the "sex" property and check the "survived" property. 
 
 const getSurvivorsByGender = (data, gender) => {
-	return 0
+	const survivors = data.filter(item => item.fields.sex === gender && item.fields.survived === "Yes");
+	return survivors.length;
 }
 
 // 14 ---------------------------------------------------------------
 // Return the number of passengers who did not survived by gender. 
 
 const getCasualitiesByGender = (data, gender) => {
-	return 0
+	const casualties = data.filter(item => item.fields.sex === gender && item.fields.survived === "No");
+	return casualties.length;
 }
 
 // 15 --------------------------------------------------------------
@@ -160,7 +168,9 @@ const getCasualitiesByGender = (data, gender) => {
 // where the fare is missing! 
 
 const getTotalFare = (data) => {
-	return 0
+	const validFares = data.filter(item => item.fields.fare !== undefined);
+	const totalFare = validFares.reduce((sum, item) => sum + item.fields.fare, 0);
+	return totalFare;
 }
 
 // 16 --------------------------------------------------------------
@@ -169,7 +179,10 @@ const getTotalFare = (data) => {
 // missing a fare! 
 
 const getAverageFare = (data) => {
-	return 0
+	const validFares = data.filter(item => item.fields.fare !== undefined);
+	const totalFare = validFares.reduce((sum, item) => sum + item.fields.fare, 0);
+	const averageFare = totalFare / validFares.length;
+	return averageFare;
 }
 
 // 17 --------------------------------------------------------------
@@ -181,7 +194,22 @@ const getAverageFare = (data) => {
 // 4 + 5 = 9 / 2 median is 4.5!
 
 const getMedianFare = (data) => {
-	return 0
+	const validFares = data.filter(item => item.fields.fare !== undefined);
+	const sortedFares = validFares.map(item => item.fields.fare).sort((a, b) => a - b);
+	const length = sortedFares.length;
+
+	if (length === 0) {
+		return 0;
+	}
+
+	const middleIndex = Math.floor(length / 2);
+
+	if (length % 2 === 0) {
+		const middleValuesSum = sortedFares[middleIndex - 1] + sortedFares[middleIndex];
+		return middleValuesSum / 2;
+	} else {
+		return sortedFares[middleIndex];
+	}
 }
 
 // 18 --------------------------------------------------------------
@@ -190,14 +218,32 @@ const getMedianFare = (data) => {
 // available. 
 
 const getAverageAge = (data) => {
-	return 0
+	const validAges = data.filter(item => item.fields.age !== undefined);
+	const totalAge = validAges.reduce((sum, item) => sum + item.fields.age, 0);
+	const averageAge = totalAge / validAges.length;
+	return averageAge;
 }
 
 // 19 --------------------------------------------------------------
 // Return the median age from passengers.
 
 const getMedianAge = (data) => {
-	return 0
+	const validAges = data.filter(item => item.fields.age !== undefined);
+	const sortedAges = validAges.map(item => item.fields.age).sort((a, b) => a - b);
+	const length = sortedAges.length;
+
+	if (length === 0) {
+		return 0;
+	}
+
+	const middleIndex = Math.floor(length / 2);
+
+	if (length % 2 === 0) {
+		const middleValuesSum = sortedAges[middleIndex - 1] + sortedAges[middleIndex];
+		return middleValuesSum / 2;
+	} else {
+		return sortedAges[middleIndex];
+	}
 }
 
 // 20 --------------------------------------------------------------
@@ -205,7 +251,10 @@ const getMedianAge = (data) => {
 // the total number. 
 
 const getAverageAgeByGender = (data, gender) => {
-	return 0
+	const validAges = data.filter(item => item.fields.age !== undefined && item.fields.sex === gender);
+	const totalAge = validAges.reduce((sum, item) => sum + item.fields.age, 0);
+	const averageAge = totalAge / validAges.length;
+	return averageAge;
 }
 
 // --------------------------------------------------------------
