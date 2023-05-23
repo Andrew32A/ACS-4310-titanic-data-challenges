@@ -15,6 +15,8 @@
 // as the parameter data. Your goal is to extract the relevant 
 // piece of information from the data and return it. 
 
+// HINT: MAP, FILTER, OR REDUCE
+
 // =================================================================
 
 // 1 ---------------------------------------------------------------
@@ -22,7 +24,7 @@
 // Returns a number.
 
 const getTotalPassengers = (data) => {
-	return 0
+	return data.length
 }
 
 // 2 ---------------------------------------------------------------
@@ -31,7 +33,8 @@ const getTotalPassengers = (data) => {
 // Return a number.
 
 const getSurvivorCount = (data) => {
-	return 0
+	const survivors = data.filter(item => item.fields.survived === "Yes");
+	return survivors.length;
 }
 
 // 3 ---------------------------------------------------------------
@@ -40,7 +43,8 @@ const getSurvivorCount = (data) => {
 // Return a number.
 
 const getCasualityCount = (data) => {
-	return 0
+	const casualties = data.filter(item => item.fields.survived === "No");
+	return casualties.length;
 }
 
 // 4 ---------------------------------------------------------------
@@ -50,7 +54,8 @@ const getCasualityCount = (data) => {
 // Return a number
 
 const countPassengersInClass = (data, pclass) => {
-	return 0
+	const passengers = data.filter(item => item.fields.pclass === pclass);
+	return passengers.length;
 }
 
 // 5 ---------------------------------------------------------------
@@ -59,7 +64,8 @@ const countPassengersInClass = (data, pclass) => {
 // Return the count of survivors in that pclass.
 
 const getSurvivorCountForClass = (data, pclass) => {
-	return 0
+	const survivors = data.filter(item => item.fields.pclass === pclass && item.fields.survived === "Yes");
+	return survivors.length;
 }
 
 // 6 ---------------------------------------------------------------
@@ -68,7 +74,8 @@ const getSurvivorCountForClass = (data, pclass) => {
 // the number of passengers who did not survive for that class. 
 
 const getCasualityCountForClass = (data, pclass) => {
-	return 0
+	const casualties = data.filter(item => item.fields.pclass === pclass && item.fields.survived === "No");
+	return casualties.length;
 }
 
 // 7 ---------------------------------------------------------------
@@ -76,7 +83,9 @@ const getCasualityCountForClass = (data, pclass) => {
 // passenger data where the age is missing. 
 
 const getMinAge = (data) => {
-	return 0
+	const validAges = data.filter(item => item.fields.age !== undefined);
+	const minAge = Math.min(...validAges.map(item => item.fields.age));
+	return minAge;
 }
 
 // 8 ---------------------------------------------------------------
@@ -84,7 +93,9 @@ const getMinAge = (data) => {
 // age is missing.
 
 const getMaxAge = (data) => {
-	return 0
+	const validAges = data.filter(item => item.fields.age !== undefined);
+	const maxAge = Math.max(...validAges.map(item => item.fields.age));
+	return maxAge;
 }
 
 // 9 ---------------------------------------------------------------
@@ -94,7 +105,8 @@ const getMaxAge = (data) => {
 // embarkation code. Return the count of passenegers with that code.
 
 const getEmbarkedCount = (data, embarked) => {
-	return 0
+	const passengers = data.filter(item => item.fields.embarked === embarked);
+	return passengers.length;
 }
 
 // 10 ---------------------------------------------------------------
@@ -102,7 +114,12 @@ const getEmbarkedCount = (data, embarked) => {
 // for some passengers you'll need to filter this out!
 
 const getMinFare = (data) => {
-	return -1
+	const validFares = data.filter(item => item.fields.fare !== undefined);
+	if (validFares.length === 0) {
+		return null;
+	}
+	const minFare = Math.min(...validFares.map(item => item.fields.fare));
+	return minFare;
 }
 
 // 11 ---------------------------------------------------------------
