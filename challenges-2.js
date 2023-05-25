@@ -145,7 +145,14 @@ const makeHistogram = (data, property, step) => {
 // to divide each value by the maximum value in the array.
 
 const normalizeProperty = (data, property) => {
-  return [];
+  const values = data
+    .map((record) => record.fields[property])
+    .filter((value) => !isNaN(value));
+
+  const maxValue = Math.max(...values);
+
+  const normalizedValues = values.map((value) => value / maxValue);
+  return normalizedValues;
 };
 
 // Normalizing is an important process that can make many other
@@ -165,7 +172,12 @@ const normalizeProperty = (data, property) => {
 // would return ['male', 'female']
 
 const getUniqueValues = (data, property) => {
-  return [];
+  const values = data
+    .map((record) => record.fields[property])
+    .filter((value) => value !== undefined);
+  const uniqueValuesSet = new Set(values);
+  const uniqueValuesArray = Array.from(uniqueValuesSet);
+  return uniqueValuesArray;
 };
 
 // There are a couple ways to do this.
